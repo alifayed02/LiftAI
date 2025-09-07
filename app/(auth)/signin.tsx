@@ -1,3 +1,4 @@
+import { signIn as supabaseSignIn } from "@/services/auth";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
@@ -7,12 +8,17 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     if (!email || !password) {
       Alert.alert("Error", "Please enter email and password");
       return;
     }
-    router.replace("/home");
+    try {
+      await supabaseSignIn(email, password);
+      router.replace("/home");
+    } catch (err: any) {
+      Alert.alert("Sign in failed", err?.message ?? "Please try again.");
+    }
   };
 
   return (

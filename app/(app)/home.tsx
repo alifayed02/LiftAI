@@ -24,15 +24,14 @@ export default function Home() {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+      mediaTypes: ["videos"],
       allowsMultipleSelection: false,
       quality: 1,
     });
 
     if (!result.canceled && result.assets && result.assets.length > 0) {
       const selected = result.assets[0];
-      // TODO: Handle selected.uri upload
-      Alert.alert("Selected video", selected.uri);
+      router.push({ pathname: "/analyze", params: { uri: selected.uri } });
     }
     setIsPickerOpen(false);
   };
