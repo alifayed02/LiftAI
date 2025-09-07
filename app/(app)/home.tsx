@@ -51,7 +51,17 @@ export default function Home() {
 
     if (!result.canceled && result.assets && result.assets.length > 0) {
       const selected = result.assets[0];
-      router.push({ pathname: "/analyze", params: { uri: selected.uri } });
+      router.push({
+        pathname: "/analyze",
+        params: {
+          uri: selected.uri ?? "",
+          assetId: (selected as any).assetId ?? "",
+          fileName: selected.fileName ?? "",
+          mimeType: (selected as any).mimeType ?? "",
+          width: selected.width ?? 0,
+          height: selected.height ?? 0,
+        },
+      });
     }
     setIsPickerOpen(false);
   };

@@ -42,6 +42,11 @@ export type Workout = {
     created_at: string;
 };
 
+export type WorkoutMetadata = {
+    width: number;
+    height: number;
+};
+
 export async function getWorkouts(userId: string): Promise<Workout[]> {
     const response = await fetch(`${API_BASE}/api/v1/workouts/user/${encodeURIComponent(userId)}`);
     if (!response.ok) {
@@ -49,4 +54,16 @@ export async function getWorkouts(userId: string): Promise<Workout[]> {
     }
     const data = await response.json();
     return data as Workout[];
+}
+
+export async function createWorkout(userId: string, videoPath: string, metadata: WorkoutMetadata) {
+	const response = await fetch(`${API_BASE}/api/v1/workouts/create`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ userId, videoPath, metadata }),
+	});
+	if (!response.ok) {
+		throw new Error(`Failed to create workout: ${response.status}`);
+	}
+	return await response.json();
 }
