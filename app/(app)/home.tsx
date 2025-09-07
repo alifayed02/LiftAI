@@ -1,20 +1,40 @@
+import { supabase } from "@/lib/supabase";
+import { getWorkouts, type Workout } from "@/services/auth";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-import React, { useState } from "react";
-import { Alert, Button, FlatList, Modal, Pressable, StyleSheet, Text, View } from "react-native";
-
-type Workout = {
-  id: number;
-  name: string;
-  date: string;
-  form_score: number;
-  video_url: string;
-};
-
-const workouts: Workout[] = require("@/app/mock_data/workouts.json");
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Alert, Button, FlatList, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function Home() {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const [workouts, setWorkouts] = useState<Workout[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const { data, error } = await supabase.auth.getUser();
+        if (error) throw error;
+        const userId = data.user?.id;
+        if (!userId) {
+          setError("Not authenticated");
+          setWorkouts([]);
+          return;
+        }
+        const list = await getWorkouts(userId);
+        if (mounted) setWorkouts(list);
+      } catch (e: any) {
+        if (mounted) setError(e?.message ?? "Failed to load workouts");
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const openLibraryForVideo = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -36,12 +56,25 @@ export default function Home() {
     setIsPickerOpen(false);
   };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Your Workout Feedback</Text>
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <View style={styles.center}> 
+          <ActivityIndicator size="large" color="#007AFF" />
+        </View>
+      );
+    }
+    if (error) {
+      return (
+        <View style={styles.center}>
+          <Text style={{ color: "#c00" }}>{error}</Text>
+        </View>
+      );
+    }
+    return (
       <FlatList
         style={styles.list}
-        data={workouts}
+        data={workouts ?? []}
         keyExtractor={(item) => String(item.id)}
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => (
@@ -52,20 +85,26 @@ export default function Home() {
                 pathname: "/video",
                 params: {
                   id: String(item.id),
-                  name: item.name,
-                  date: item.date,
-                  form_score: String(item.form_score),
+                  name: item.title ?? "Workout",
+                  date: item.recorded_at ?? item.created_at,
+                  form_score: "",
                   video_url: item.video_url,
                 },
               })
             }
           >
-            <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.meta}>Date: {item.date}</Text>
-            <Text style={styles.meta}>Form score: {item.form_score}</Text>
+            <Text style={styles.name}>{item.title ?? "Workout"}</Text>
+            <Text style={styles.meta}>Date: {item.recorded_at ?? item.created_at}</Text>
           </Pressable>
         )}
       />
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Your Workout Feedback</Text>
+      {renderContent()}
       <View style={styles.footer}>
         <Button title="Analyze Workout" onPress={() => setIsPickerOpen(true)} />
       </View>
@@ -149,5 +188,10 @@ const styles = StyleSheet.create({
   modalCancelText: {
     fontSize: 16,
     color: "#333",
+  },
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

@@ -1,3 +1,4 @@
+import { signUp as supabaseSignUp } from "@/services/auth";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { Alert, Button, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
@@ -7,7 +8,7 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (!email || !password || !confirmPassword) {
       Alert.alert("Error", "Please fill in all fields");
       return;
@@ -16,8 +17,13 @@ export default function SignUp() {
       Alert.alert("Error", "Passwords do not match");
       return;
     }
-    // TODO: Implement real sign-up logic (e.g., API call)
-    Alert.alert("Success", "Account created!");
+    try {
+      await supabaseSignUp(email, password);
+      Alert.alert("Success", "Account created! Please sign in.");
+      router.replace("/signin");
+    } catch (err: any) {
+      Alert.alert("Sign up failed", err?.message ?? "Please try again.");
+    }
   };
 
   return (

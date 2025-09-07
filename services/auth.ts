@@ -1,8 +1,28 @@
 import { supabase } from '@/lib/supabase';
 
+const ENV = process.env.EXPO_PUBLIC_ENV;
+const API_BASE = ENV === 'production' ? process.env.EXPO_PUBLIC_PROD_URL : process.env.EXPO_PUBLIC_DEV_URL;
+
 export async function signUp(email: string, password: string) {
     const { data, error } = await supabase.auth.signUp({ email, password });
     if (error) throw error;
+
+    const userId = data.user?.id;
+    if (!userId) throw new Error('User ID not found');
+
+    try {
+        const response = await fetch(`${API_BASE}/api/v1/users/create`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: userId, email }),
+        });
+        if (!response.ok) {
+            console.warn('Failed to create user in backend:', response.status, await response.text());
+        }
+    } catch (e) {
+        console.warn('Error calling backend user create endpoint:', e);
+    }
+
     return data;
 }
   
@@ -10,4 +30,23 @@ export async function signIn(email: string, password: string) {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
     return data;
+}
+
+export type Workout = {
+    id: string;
+    user_id: string;
+    title: string | null;
+    notes: string | null;
+    video_url: string;
+    recorded_at: string | null;
+    created_at: string;
+};
+
+export async function getWorkouts(userId: string): Promise<Workout[]> {
+    const response = await fetch(`${API_BASE}/api/v1/workouts/user/${encodeURIComponent(userId)}`);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch workouts: ${response.status}`);
+    }
+    const data = await response.json();
+    return data as Workout[];
 }
