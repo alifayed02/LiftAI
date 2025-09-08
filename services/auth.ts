@@ -32,6 +32,11 @@ export async function signIn(email: string, password: string) {
     return data;
 }
 
+export async function signOut() {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
+}
+
 export type Workout = {
     id: string;
     user_id: string;

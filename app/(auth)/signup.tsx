@@ -64,7 +64,6 @@ export default function SignUp() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -93,3 +92,4 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
+

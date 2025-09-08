@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase";
-import { getWorkouts, type Workout } from "@/services/auth";
+import { getWorkouts, signOut, type Workout } from "@/services/auth";
+import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -113,7 +114,36 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Your Workout Feedback</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>Your Workout Feedback</Text>
+        <Pressable
+          accessibilityRole="button"
+          hitSlop={8}
+          onPress={() => {
+            Alert.alert(
+              "Log out",
+              "Are you sure you want to log out?",
+              [
+                { text: "Cancel", style: "cancel" },
+                {
+                  text: "Log Out",
+                  style: "destructive",
+                  onPress: async () => {
+                    try {
+                      await signOut();
+                      router.replace("/signin");
+                    } catch (e: any) {
+                      Alert.alert("Sign out failed", e?.message ?? "Please try again.");
+                    }
+                  },
+                },
+              ]
+            );
+          }}
+        >
+          <Ionicons name="person-circle-outline" size={28} color="#333" />
+        </Pressable>
+      </View>
       {renderContent()}
       <View style={styles.footer}>
         <Button title="Analyze Workout" onPress={() => setIsPickerOpen(true)} />
@@ -139,6 +169,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+  },
+  header: {
+    flexDirection: "row",
+    // alignItems: "center",
+    justifyContent: "space-between",
   },
   title: {
     fontSize: 20,

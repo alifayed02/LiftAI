@@ -1,9 +1,10 @@
 import { supabase } from "@/lib/supabase";
 import { createWorkout } from "@/services/auth";
+import { ResizeMode, Video } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 import { useLocalSearchParams } from "expo-router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, StyleSheet, Text, View } from "react-native";
 
 export default function Analyze() {
@@ -23,6 +24,7 @@ export default function Analyze() {
 
   useEffect(() => {
     let cancelled = false;
+    const [w, h] = [Number(params.width ?? 0), Number(params.height ?? 0)];
 
     const b64ToArrayBuffer = (base64: string) => {
       const binaryString = globalThis.atob ? globalThis.atob(base64) : Buffer.from(base64, 'base64').toString('binary');
@@ -56,8 +58,16 @@ export default function Analyze() {
           upsert: false,
         });
         if (error) throw error;
-        
-        await createWorkout(userId, path, { width: Number(width), height: Number(height) });
+
+        const created = await createWorkout(userId, path, { width: Number(width), height: Number(height) });
+        const videoPath = created?.video_url as string | undefined;
+        if (videoPath) {
+          const { data: signed, error: signErr } = await supabase.storage
+            .from('analyzed_workouts')
+            .createSignedUrl(videoPath, 60 * 60);
+          if (signErr) throw signErr;
+          if (!cancelled) setSignedUrl(signed?.signedUrl ?? null);
+        }
 
       } catch (e: any) {
         if (!cancelled) Alert.alert('Upload failed', e?.message ?? 'Please try again.');
@@ -70,13 +80,24 @@ export default function Analyze() {
     };
   }, [sourceUri, assetId, fileName, mimeType]);
 
+  const [signedUrl, setSignedUrl] = useState<string | null>(null);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Workout Analysis</Text>
-      <View style={styles.loaderSection}>
-        <ActivityIndicator size="large" color="#007AFF" />
-        <Text style={styles.loaderText}>Analyzing Exercise...</Text>
-      </View>
+      {signedUrl ? (
+        <Video
+          source={{ uri: signedUrl }}
+          useNativeControls
+          style={{ width: '100%', aspectRatio: (Number(width) && Number(height)) ? Number(width) / Number(height) : 16 / 9 }}
+          resizeMode={ResizeMode.CONTAIN}
+        />
+      ) : (
+        <View style={styles.loaderSection}>
+          <ActivityIndicator size="large" color="#007AFF" />
+          <Text style={styles.loaderText}>Analyzing Exercise...</Text>
+        </View>
+      )}
     </View>
   );
 }

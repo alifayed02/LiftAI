@@ -1,4 +1,5 @@
 import { Stack } from "expo-router";
+import { Platform } from "react-native";
 
 export default function AppLayout() {
   return (
@@ -6,10 +7,15 @@ export default function AppLayout() {
       screenOptions={{
         headerTitle: "",               // hide title
         headerBackTitle: "", // hide back text on iOS
+        headerTransparent: true,
         headerStyle: {
-          backgroundColor: "white",    // match your screen background
+          backgroundColor: "transparent",
         },
         headerShadowVisible: false,    // remove bottom border line
+        contentStyle: {
+          backgroundColor: "white",
+          paddingTop: Platform.OS === "ios" ? 30 : 24,
+        },
       }}
     />
   );
