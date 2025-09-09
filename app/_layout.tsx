@@ -1,8 +1,11 @@
+import '@/global.css';
+import { PortalHost } from "@rn-primitives/portal";
 import { Stack } from "expo-router";
 
 export default function RootLayout() {
   return (
-    <Stack
+    <>
+        <Stack
       screenOptions={{
         headerTitle: "",
         headerBackTitle: "",
@@ -11,5 +14,7 @@ export default function RootLayout() {
         headerStyle: { backgroundColor: "white" },
       }}
     />
+    <PortalHost />
+    </>
   );
 }
