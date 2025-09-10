@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { useColorScheme } from 'nativewind';
 import { Image, Platform, View } from 'react-native';
 
@@ -13,11 +13,6 @@ const SOCIAL_CONNECTION_STRATEGIES = [
     type: 'oauth_google',
     source: { uri: 'https://img.clerk.com/static/google.png?width=160' },
     useTint: false,
-  },
-  {
-    type: 'oauth_github',
-    source: { uri: 'https://img.clerk.com/static/github.png?width=160' },
-    useTint: true,
   },
 ];
 

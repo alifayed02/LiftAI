@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase';
+import * as Linking from 'expo-linking';
 
 const ENV = process.env.EXPO_PUBLIC_ENV;
 const API_BASE = ENV === 'production' ? process.env.EXPO_PUBLIC_PROD_URL : process.env.EXPO_PUBLIC_DEV_URL;
@@ -34,6 +35,14 @@ export async function signIn(email: string, password: string) {
 
 export async function signOut() {
     const { error } = await supabase.auth.signOut();
+    if (error) throw error;
+}
+
+export async function forgotPassword(email: string) {
+    const redirectTo = Linking.createURL("auth-reset");
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+        redirectTo: redirectTo,
+    });
     if (error) throw error;
 }
 

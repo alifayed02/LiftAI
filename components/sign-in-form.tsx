@@ -11,36 +11,30 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Text } from '@/components/ui/text';
-import { signUp as supabaseSignUp } from '@/services/auth';
+import { signIn as supabaseSignIn } from '@/services/auth';
 import { router } from 'expo-router';
 import * as React from 'react';
-import { Alert, TextInput, View } from 'react-native';
+import { Alert, type TextInput, View } from 'react-native';
 
-export function SignUpForm() {
+export function SignInForm() {
   const passwordInputRef = React.useRef<TextInput>(null);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const [confirmPassword, setConfirmPassword] = React.useState('');
 
   function onEmailSubmitEditing() {
     passwordInputRef.current?.focus();
   }
 
   async function onSubmit() {
-    if (!email || !password || !confirmPassword) {
-      Alert.alert("Error", "Please fill in all fields");
-      return;
-    }
-    if (password !== confirmPassword) {
-      Alert.alert("Error", "Passwords do not match");
+    if (!email || !password) {
+      Alert.alert("Error", "Please enter email and password");
       return;
     }
     try {
-      await supabaseSignUp(email, password);
-      Alert.alert("Success", "Account created! Please sign in.");
-      router.replace("/signin");
+      await supabaseSignIn(email, password);
+      router.replace("/home");
     } catch (err: any) {
-      Alert.alert("Sign up failed", err?.message ?? "Please try again.");
+      Alert.alert("Sign in failed", err?.message ?? "Please try again.");
     }
   }
 
@@ -48,9 +42,9 @@ export function SignUpForm() {
     <View className="gap-6">
       <Card className="border-border/0 sm:border-border shadow-none sm:shadow-sm sm:shadow-black/5">
         <CardHeader>
-          <CardTitle className="text-center text-xl sm:text-left">Create your account</CardTitle>
+          <CardTitle className="text-center text-xl sm:text-left">Sign in to your app</CardTitle>
           <CardDescription className="text-center sm:text-left">
-            Welcome! Please fill in the details to get started.
+            Welcome back! Please sign in to continue
           </CardDescription>
         </CardHeader>
         <CardContent className="gap-6">
@@ -73,6 +67,15 @@ export function SignUpForm() {
             <View className="gap-1.5">
               <View className="flex-row items-center">
                 <Label htmlFor="password">Password</Label>
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="web:h-fit ml-auto h-4 px-1 py-0 sm:h-4"
+                  onPress={() => {
+                    router.replace('/forgot');
+                  }}>
+                  <Text className="font-normal leading-4">Forgot your password?</Text>
+                </Button>
               </View>
               <Input
                 ref={passwordInputRef}
@@ -84,26 +87,13 @@ export function SignUpForm() {
                 onSubmitEditing={onSubmit}
               />
             </View>
-            <View className="gap-1.5">
-              <View className="flex-row items-center">
-                <Label htmlFor="confirmPassword">Confirm password</Label>
-              </View>
-              <Input
-                id="confirmPassword"
-                secureTextEntry
-                returnKeyType="send"
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                onSubmitEditing={onSubmit}
-              />
-            </View>
             <Button className="w-full" onPress={onSubmit}>
               <Text>Continue</Text>
             </Button>
           </View>
           <Text className="text-center text-sm">
-            Already have an account?{' '}
-            <Text onPress={() => router.replace('/signin')} className="text-sm underline underline-offset-4">Sign in</Text>
+            Don&apos;t have an account?{' '}
+            <Text onPress={() => router.replace('/signup')} className="text-sm underline underline-offset-4">Sign up</Text>
           </Text>
           <View className="flex-row items-center">
             <Separator className="flex-1" />
