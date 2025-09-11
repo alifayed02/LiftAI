@@ -1,10 +1,29 @@
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { supabase } from "@/lib/supabase";
+import { formatDate } from "@/lib/utils";
 import { getWorkouts, signOut, type Workout } from "@/services/auth";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Button, FlatList, Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 export default function Home() {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
@@ -40,7 +59,10 @@ export default function Home() {
   const openLibraryForVideo = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
-      Alert.alert("Permission required", "Please allow media library access to upload a video.");
+      Alert.alert(
+        "Permission required",
+        "Please allow media library access to upload a video."
+      );
       return;
     }
 
@@ -70,7 +92,7 @@ export default function Home() {
   const renderContent = () => {
     if (loading) {
       return (
-        <View style={styles.center}> 
+        <View style={styles.center}>
           <ActivityIndicator size="large" color="#007AFF" />
         </View>
       );
@@ -87,7 +109,19 @@ export default function Home() {
         style={styles.list}
         data={workouts ?? []}
         keyExtractor={(item) => String(item.id)}
-        contentContainerStyle={styles.listContent}
+        contentContainerStyle={[
+          styles.listContent,
+          (!workouts || workouts.length === 0) && {
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          },
+        ]}
+        ListEmptyComponent={
+          <Text style={{ color: "#555", fontSize: 16 }}>
+            Analyze a workout to get started
+          </Text>
+        }
         renderItem={({ item }) => (
           <Pressable
             style={styles.item}
@@ -105,7 +139,9 @@ export default function Home() {
             }
           >
             <Text style={styles.name}>{item.title ?? "Workout"}</Text>
-            <Text style={styles.meta}>Date: {item.recorded_at ?? item.created_at}</Text>
+            <Text style={styles.meta}>
+              Date: {formatDate(item.recorded_at ?? item.created_at)}
+            </Text>
           </Pressable>
         )}
       />
@@ -116,46 +152,71 @@ export default function Home() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Your Workout Feedback</Text>
-        <Pressable
-          accessibilityRole="button"
-          hitSlop={8}
-          onPress={() => {
-            Alert.alert(
-              "Log out",
-              "Are you sure you want to log out?",
-              [
-                { text: "Cancel", style: "cancel" },
-                {
-                  text: "Log Out",
-                  style: "destructive",
-                  onPress: async () => {
-                    try {
-                      await signOut();
-                      router.replace("/signin");
-                    } catch (e: any) {
-                      Alert.alert("Sign out failed", e?.message ?? "Please try again.");
-                    }
-                  },
-                },
-              ]
-            );
-          }}
-        >
-          <Ionicons name="person-circle-outline" size={28} color="#333" />
-        </Pressable>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Ionicons name="person-circle-outline" size={28} color="#333" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>
+              <Text>My Account</Text>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onPress={() => router.push("/upgrade")}>
+              <Text>Upgrade</Text>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              variant="destructive"
+              onPress={() => {
+                Alert.alert(
+                  "Log out",
+                  "Are you sure you want to log out?",
+                  [
+                    { text: "Cancel", style: "cancel" },
+                    {
+                      text: "Log Out",
+                      style: "destructive",
+                      onPress: async () => {
+                        try {
+                          await signOut();
+                          router.replace("/signin");
+                        } catch (e: any) {
+                          Alert.alert("Sign out failed", e?.message ?? "Please try again.");
+                        }
+                      },
+                    },
+                  ]
+                );
+              }}
+            >
+              <Text className="text-red-500">Log Out</Text>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </View>
       {renderContent()}
       <View style={styles.footer}>
-        <Button title="Analyze Workout" onPress={() => setIsPickerOpen(true)} />
+        <Button onPress={() => setIsPickerOpen(true)}>
+          <Text className="text-white">Analyze Workout</Text>
+        </Button>
       </View>
 
-      <Modal visible={isPickerOpen} transparent animationType="fade" onRequestClose={() => setIsPickerOpen(false)}>
+      <Modal
+        visible={isPickerOpen}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setIsPickerOpen(false)}
+      >
         <View style={styles.modalBackdrop}>
           <View style={styles.modalCard}>
             <Pressable onPress={openLibraryForVideo} style={styles.modalAction}>
-              <Text style={styles.modalActionText}>Upload from camera roll</Text>
+              <Text style={styles.modalActionText}>
+                Upload Video
+              </Text>
             </Pressable>
-            <Pressable onPress={() => setIsPickerOpen(false)} style={[styles.modalAction, styles.modalCancel]}>
+            <Pressable
+              onPress={() => setIsPickerOpen(false)}
+              style={[styles.modalAction, styles.modalCancel]}
+            >
               <Text style={styles.modalCancelText}>Cancel</Text>
             </Pressable>
           </View>

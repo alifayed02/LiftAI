@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { signInWithApple } from '@/lib/apple';
 import { cn } from '@/lib/utils';
 import { useColorScheme } from 'nativewind';
 import { Image, Platform, View } from 'react-native';
@@ -9,11 +10,11 @@ const SOCIAL_CONNECTION_STRATEGIES = [
     source: { uri: 'https://img.clerk.com/static/apple.png?width=160' },
     useTint: true,
   },
-  {
-    type: 'oauth_google',
-    source: { uri: 'https://img.clerk.com/static/google.png?width=160' },
-    useTint: false,
-  },
+  // {
+  //   type: 'oauth_google',
+  //   source: { uri: 'https://img.clerk.com/static/google.png?width=160' },
+  //   useTint: false,
+  // },
 ];
 
 export function SocialConnections() {
@@ -30,6 +31,9 @@ export function SocialConnections() {
             className="sm:flex-1"
             onPress={() => {
               // TODO: Authenticate with social provider and navigate to protected screen if successful
+              if (strategy.type === 'oauth_apple') {
+                signInWithApple();
+              }
             }}>
             <Image
               className={cn('size-4', strategy.useTint && Platform.select({ web: 'dark:invert' }))}

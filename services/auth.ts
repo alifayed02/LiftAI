@@ -76,8 +76,39 @@ export async function createWorkout(userId: string, videoPath: string, metadata:
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ userId, videoPath, metadata }),
 	});
-	if (!response.ok) {
-		throw new Error(`Failed to create workout: ${response.status}`);
-	}
+    if (!response.ok) {
+        const msg = `Failed to create workout: ${response.status} ${response.statusText}`;
+        const err: any = new Error(msg);
+        err.status = response.status;
+        err.statusText = response.statusText;
+        err.body = await response.text().catch(() => '');
+        throw err;
+    }
 	return await response.json();
+}
+
+export type BillingInterval = 'one_time' | 'month' | 'year';
+
+export type Plan = {
+    id: string;
+    name: string;
+    price_cents: number;
+    interval: BillingInterval;
+    created_at: string;
+}
+
+export async function getPlans(): Promise<Plan[]> {
+    const response = await fetch(`${API_BASE}/api/v1/plans/`);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch plans: ${response.status}`);
+    }
+    const data = await response.json();
+    const plans: Plan[] = (Array.isArray(data) ? data : []).map((p: any) => ({
+        id: String(p?.id ?? ''),
+        name: String(p?.name ?? ''),
+        price_cents: Number(p?.price_cents ?? 0),
+        interval: (p?.interval === 'one_time' || p?.interval === 'month' || p?.interval === 'year') ? p.interval : 'one_time',
+        created_at: String(p?.created_at ?? ''),
+    }));
+    return plans;
 }

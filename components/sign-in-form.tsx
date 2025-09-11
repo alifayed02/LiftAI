@@ -1,4 +1,3 @@
-import { SocialConnections } from '@/components/social-connections';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -9,7 +8,6 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
 import { Text } from '@/components/ui/text';
 import { signIn as supabaseSignIn } from '@/services/auth';
 import { router } from 'expo-router';
@@ -42,7 +40,7 @@ export function SignInForm() {
     <View className="gap-6">
       <Card className="border-border/0 sm:border-border shadow-none sm:shadow-sm sm:shadow-black/5">
         <CardHeader>
-          <CardTitle className="text-center text-xl sm:text-left">Sign in to your app</CardTitle>
+          <CardTitle className="text-center text-xl sm:text-left">Sign In</CardTitle>
           <CardDescription className="text-center sm:text-left">
             Welcome back! Please sign in to continue
           </CardDescription>
@@ -53,7 +51,6 @@ export function SignInForm() {
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
-                placeholder="m@example.com"
                 keyboardType="email-address"
                 autoComplete="email"
                 autoCapitalize="none"
@@ -95,12 +92,12 @@ export function SignInForm() {
             Don&apos;t have an account?{' '}
             <Text onPress={() => router.replace('/signup')} className="text-sm underline underline-offset-4">Sign up</Text>
           </Text>
-          <View className="flex-row items-center">
+          {/* <View className="flex-row items-center">
             <Separator className="flex-1" />
             <Text className="text-muted-foreground px-4 text-sm">or</Text>
             <Separator className="flex-1" />
           </View>
-          <SocialConnections />
+          <SocialConnections /> */}
         </CardContent>
       </Card>
     </View>

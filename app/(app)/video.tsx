@@ -1,8 +1,10 @@
 import { supabase } from "@/lib/supabase";
+import { formatDate } from "@/lib/utils";
+import { Ionicons } from "@expo/vector-icons";
 import { ResizeMode, Video } from "expo-av";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function WorkoutVideo() {
   const params = useLocalSearchParams<{
@@ -44,8 +46,11 @@ export default function WorkoutVideo() {
 
   return (
     <View style={styles.container}>
+      <Pressable className="mb-2" onPress={() => router.back()}>
+        <Ionicons name="arrow-back" size={24} color="black" />
+      </Pressable>
       <Text style={styles.title}>{params.name ?? "Workout"}</Text>
-      {params.date ? <Text style={styles.meta}>Date: {params.date}</Text> : null}
+      {params.date ? <Text style={styles.meta}>Date: {formatDate(String(params.date))}</Text> : null}
       {params.form_score ? <Text style={styles.meta}>Form score: {params.form_score}</Text> : null}
       {loading ? (
         <View style={{ marginTop: 16 }}>

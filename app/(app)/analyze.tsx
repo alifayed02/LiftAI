@@ -3,7 +3,7 @@ import { createWorkout } from "@/services/auth";
 import { ResizeMode, Video } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, StyleSheet, Text, View } from "react-native";
 
@@ -60,6 +60,7 @@ export default function Analyze() {
         if (error) throw error;
 
         const created = await createWorkout(userId, path, { width: Number(width), height: Number(height) });
+
         const videoPath = created?.video_url as string | undefined;
         if (videoPath) {
           const { data: signed, error: signErr } = await supabase.storage
@@ -70,7 +71,13 @@ export default function Analyze() {
         }
 
       } catch (e: any) {
-        if (!cancelled) Alert.alert('Upload failed', e?.message ?? 'Please try again.');
+        if (!cancelled) {
+          if (e?.status === 403) {
+            router.replace("/upgrade");
+            return;
+          }
+          Alert.alert('Upload failed', e?.message ?? 'Please try again.');
+        }
       }
     };
 
