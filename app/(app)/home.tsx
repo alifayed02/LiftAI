@@ -20,7 +20,6 @@ import {
   FlatList,
   Modal,
   Pressable,
-  StyleSheet,
   Text,
   View,
 } from "react-native";
@@ -92,39 +91,35 @@ export default function Home() {
   const renderContent = () => {
     if (loading) {
       return (
-        <View style={styles.center}>
+        <View className="flex-1 items-center justify-center">
           <ActivityIndicator size="large" color="#007AFF" />
         </View>
       );
     }
     if (error) {
       return (
-        <View style={styles.center}>
-          <Text style={{ color: "#c00" }}>{error}</Text>
+        <View className="flex-1 items-center justify-center">
+          <Text className="text-destructive">{error}</Text>
+        </View>
+      );
+    }
+    if (!workouts || workouts.length === 0) {
+      return (
+        <View className="flex-1 items-center justify-center">
+          <Text className="text-muted-foreground text-base">
+            Analyze a workout to get started
+          </Text>
         </View>
       );
     }
     return (
       <FlatList
-        style={styles.list}
-        data={workouts ?? []}
+        className="flex-1"
+        data={workouts}
         keyExtractor={(item) => String(item.id)}
-        contentContainerStyle={[
-          styles.listContent,
-          (!workouts || workouts.length === 0) && {
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-          },
-        ]}
-        ListEmptyComponent={
-          <Text style={{ color: "#555", fontSize: 16 }}>
-            Analyze a workout to get started
-          </Text>
-        }
         renderItem={({ item }) => (
           <Pressable
-            style={styles.item}
+            className="border border-border rounded-lg p-3 mb-3 bg-card"
             onPress={() =>
               router.push({
                 pathname: "/video",
@@ -138,8 +133,10 @@ export default function Home() {
               })
             }
           >
-            <Text style={styles.name}>{item.title ?? "Workout"}</Text>
-            <Text style={styles.meta}>
+            <Text className="text-base font-semibold mb-1">
+              {item.title ?? "Workout"}
+            </Text>
+            <Text className="text-sm text-muted-foreground">
               Date: {formatDate(item.recorded_at ?? item.created_at)}
             </Text>
           </Pressable>
@@ -149,9 +146,9 @@ export default function Home() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Your Workout Feedback</Text>
+    <View className="flex-1 p-4">
+      <View className="flex-row justify-between">
+        <Text className="text-xl font-semibold mb-3">Your Workout Feedback</Text>
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Ionicons name="person-circle-outline" size={28} color="#333" />
@@ -194,7 +191,7 @@ export default function Home() {
         </DropdownMenu>
       </View>
       {renderContent()}
-      <View style={styles.footer}>
+      <View className="py-3">
         <Button onPress={() => setIsPickerOpen(true)}>
           <Text className="text-white">Analyze Workout</Text>
         </Button>
@@ -206,18 +203,18 @@ export default function Home() {
         animationType="fade"
         onRequestClose={() => setIsPickerOpen(false)}
       >
-        <View style={styles.modalBackdrop}>
-          <View style={styles.modalCard}>
-            <Pressable onPress={openLibraryForVideo} style={styles.modalAction}>
-              <Text style={styles.modalActionText}>
+        <View className="flex-1 bg-black/40 justify-end">
+          <View className="bg-card p-4 rounded-t-xl">
+            <Pressable onPress={openLibraryForVideo} className="py-4 items-center">
+              <Text className="text-base font-semibold text-blue-500">
                 Upload Video
               </Text>
             </Pressable>
             <Pressable
               onPress={() => setIsPickerOpen(false)}
-              style={[styles.modalAction, styles.modalCancel]}
+              className="py-4 items-center border-t border-border"
             >
-              <Text style={styles.modalCancelText}>Cancel</Text>
+              <Text className="text-base text-foreground">Cancel</Text>
             </Pressable>
           </View>
         </View>
@@ -225,79 +222,3 @@ export default function Home() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  header: {
-    flexDirection: "row",
-    // alignItems: "center",
-    justifyContent: "space-between",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "600",
-    marginBottom: 12,
-  },
-  list: {
-    flex: 1,
-  },
-  listContent: {
-    paddingBottom: 16,
-  },
-  item: {
-    borderWidth: 1,
-    borderColor: "#e5e5e5",
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 12,
-    backgroundColor: "#fff",
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: "600",
-    marginBottom: 4,
-  },
-  meta: {
-    fontSize: 14,
-    color: "#555",
-  },
-  footer: {
-    paddingVertical: 12,
-  },
-  modalBackdrop: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
-    justifyContent: "flex-end",
-  },
-  modalCard: {
-    backgroundColor: "#fff",
-    padding: 16,
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-  },
-  modalAction: {
-    paddingVertical: 16,
-    alignItems: "center",
-  },
-  modalActionText: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#007AFF",
-  },
-  modalCancel: {
-    borderTopWidth: 1,
-    borderTopColor: "#eee",
-  },
-  modalCancelText: {
-    fontSize: 16,
-    color: "#333",
-  },
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
