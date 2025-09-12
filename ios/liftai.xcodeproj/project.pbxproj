@@ -8,25 +8,25 @@
 
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		36111AA7BA87193F343FAB8F /* libPods-liftai.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4B6724300AA907FBDA9249A /* libPods-liftai.a */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		85664B77CF229B5F8FB6A150 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 6FAA2E08967CB225139003A4 /* PrivacyInfo.xcprivacy */; };
-		B8A75E08B9CB731C06C50891 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA81849B1A3381723293793C /* ExpoModulesProvider.swift */; };
+		5D418D659E4EA2D377B8971B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 728CFB950C973B611AFFAD10 /* PrivacyInfo.xcprivacy */; };
+		64FB7610839BC44740C519D9 /* libPods-liftai.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C94806BEFB5420D824449E9 /* libPods-liftai.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
+		F5EBD83FB60030D58A3B7589 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873C8FBE4AE3FB8FFBFF50C8 /* ExpoModulesProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		115D0FF8C31F8FF5547FFA6F /* Pods-liftai.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-liftai.release.xcconfig"; path = "Target Support Files/Pods-liftai/Pods-liftai.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* liftai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = liftai.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = liftai/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = liftai/Info.plist; sourceTree = "<group>"; };
-		5D176EF1DE97ACCB88E863F4 /* Pods-liftai.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-liftai.debug.xcconfig"; path = "Target Support Files/Pods-liftai/Pods-liftai.debug.xcconfig"; sourceTree = "<group>"; };
-		6FAA2E08967CB225139003A4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = liftai/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		A4B6724300AA907FBDA9249A /* libPods-liftai.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-liftai.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C5E007B7805B79FFCAEA1C5 /* Pods-liftai.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-liftai.debug.xcconfig"; path = "Target Support Files/Pods-liftai/Pods-liftai.debug.xcconfig"; sourceTree = "<group>"; };
+		6C94806BEFB5420D824449E9 /* libPods-liftai.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-liftai.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		728CFB950C973B611AFFAD10 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = liftai/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		873C8FBE4AE3FB8FFBFF50C8 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-liftai/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		9EAFEA6E6A6FF37DFCA1C219 /* Pods-liftai.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-liftai.release.xcconfig"; path = "Target Support Files/Pods-liftai/Pods-liftai.release.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = liftai/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		EA81849B1A3381723293793C /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-liftai/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = liftai/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* liftai-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "liftai-Bridging-Header.h"; path = "liftai/liftai-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -37,7 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				36111AA7BA87193F343FAB8F /* libPods-liftai.a in Frameworks */,
+				64FB7610839BC44740C519D9 /* libPods-liftai.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,28 +53,36 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				6FAA2E08967CB225139003A4 /* PrivacyInfo.xcprivacy */,
+				728CFB950C973B611AFFAD10 /* PrivacyInfo.xcprivacy */,
 			);
 			name = liftai;
-			sourceTree = "<group>";
-		};
-		2BA3B93CDEC5F5A8F36F4E89 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				5D176EF1DE97ACCB88E863F4 /* Pods-liftai.debug.xcconfig */,
-				115D0FF8C31F8FF5547FFA6F /* Pods-liftai.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				A4B6724300AA907FBDA9249A /* libPods-liftai.a */,
+				6C94806BEFB5420D824449E9 /* libPods-liftai.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5A00C68AB3A3FAA2FFD51C61 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1C5E007B7805B79FFCAEA1C5 /* Pods-liftai.debug.xcconfig */,
+				9EAFEA6E6A6FF37DFCA1C219 /* Pods-liftai.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		6C94389382D847575CA16EF2 /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				BBF58EEF434AEC228C032F7A /* liftai */,
+			);
+			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -91,8 +99,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				2BA3B93CDEC5F5A8F36F4E89 /* Pods */,
-				88B42F77705DBB7CD12B114D /* ExpoModulesProviders */,
+				5A00C68AB3A3FAA2FFD51C61 /* Pods */,
+				6C94389382D847575CA16EF2 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -107,22 +115,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		88B42F77705DBB7CD12B114D /* ExpoModulesProviders */ = {
-			isa = PBXGroup;
-			children = (
-				9F7BD4C41F916C09DC42076C /* liftai */,
-			);
-			name = ExpoModulesProviders;
-			sourceTree = "<group>";
-		};
-		9F7BD4C41F916C09DC42076C /* liftai */ = {
-			isa = PBXGroup;
-			children = (
-				EA81849B1A3381723293793C /* ExpoModulesProvider.swift */,
-			);
-			name = liftai;
-			sourceTree = "<group>";
-		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
@@ -130,6 +122,14 @@
 			);
 			name = Supporting;
 			path = liftai/Supporting;
+			sourceTree = "<group>";
+		};
+		BBF58EEF434AEC228C032F7A /* liftai */ = {
+			isa = PBXGroup;
+			children = (
+				873C8FBE4AE3FB8FFBFF50C8 /* ExpoModulesProvider.swift */,
+			);
+			name = liftai;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,13 +140,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "liftai" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				E23849C4F1429496B619CC79 /* [Expo] Configure project */,
+				40AB106656B6D1A5F22349CD /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				6E1E8EF8F24E86268E7744BE /* [CP] Embed Pods Frameworks */,
+				22AC8FFBF2776752C25B3AE8 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -196,7 +196,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				85664B77CF229B5F8FB6A150 /* PrivacyInfo.xcprivacy in Resources */,
+				5D418D659E4EA2D377B8971B /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,7 +240,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6E1E8EF8F24E86268E7744BE /* [CP] Embed Pods Frameworks */ = {
+		22AC8FFBF2776752C25B3AE8 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -257,6 +257,25 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-liftai/Pods-liftai-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		40AB106656B6D1A5F22349CD /* [Expo] Configure project */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[Expo] Configure project";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-liftai/expo-configure-project.sh\"\n";
 		};
 		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -304,25 +323,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-liftai/Pods-liftai-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E23849C4F1429496B619CC79 /* [Expo] Configure project */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[Expo] Configure project";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-liftai/expo-configure-project.sh\"\n";
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -331,7 +331,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				B8A75E08B9CB731C06C50891 /* ExpoModulesProvider.swift in Sources */,
+				F5EBD83FB60030D58A3B7589 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,7 +340,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5D176EF1DE97ACCB88E863F4 /* Pods-liftai.debug.xcconfig */;
+			baseConfigurationReference = 1C5E007B7805B79FFCAEA1C5 /* Pods-liftai.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -364,7 +364,7 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.anonymous.liftai;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9m.liftai;
 				PRODUCT_NAME = liftai;
 				SWIFT_OBJC_BRIDGING_HEADER = "liftai/liftai-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -376,7 +376,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 115D0FF8C31F8FF5547FFA6F /* Pods-liftai.release.xcconfig */;
+			baseConfigurationReference = 9EAFEA6E6A6FF37DFCA1C219 /* Pods-liftai.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -395,7 +395,7 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = com.anonymous.liftai;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9m.liftai;
 				PRODUCT_NAME = liftai;
 				SWIFT_OBJC_BRIDGING_HEADER = "liftai/liftai-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

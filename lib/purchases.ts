@@ -1,16 +1,22 @@
 // lib/purchases.ts
 import { supabase } from '@/lib/supabase';
-import Purchases from 'react-native-purchases';
+import { Platform } from 'react-native';
+import Purchases from "react-native-purchases";
+
+// Prefer env vars (EXPO_PUBLIC_*) so you don't hardcode keys
+const RC_IOS_KEY = process.env.EXPO_PUBLIC_RC_IOS_KEY ?? "appl_...";
+const RC_ANDROID_KEY = process.env.EXPO_PUBLIC_RC_ANDROID_KEY ?? "goog_...";
+
+// simple guard to avoid double-configure
+let configured = false;
 
 export async function initPurchases() {
   const session = await supabase.auth.getUser();
-  const appUserID = session.data.user?.id; // tie to Supabase user ID
+  const appUserID = session.data.user?.id;
 
   await Purchases.configure({
-    apiKey: __DEV__
-      ? '<REVENUeCAT_PUBLIC_SDK_KEY_IOS_OR_ANDROID_SANDBOX>'
-      : '<REVENUECAT_PUBLIC_SDK_KEY_PROD>',
-    appUserID, // makes cross-device restore trivial
+    apiKey: Platform.OS === "ios" ? RC_IOS_KEY : RC_ANDROID_KEY,
+    appUserID: appUserID
   });
 }
 

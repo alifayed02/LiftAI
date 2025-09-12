@@ -7,7 +7,8 @@ export default function SignInScreen() {
     <ScrollView
       keyboardShouldPersistTaps="handled"
       contentContainerClassName="sm:flex-1 items-center justify-center p-4 py-8 sm:py-4 sm:p-6 mt-safe"
-      keyboardDismissMode="interactive">
+      keyboardDismissMode="interactive"
+      className="bg-background">
       <View className="w-full max-w-sm">
         <SignInForm />
       </View>

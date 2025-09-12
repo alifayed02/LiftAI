@@ -1,3 +1,4 @@
+import { SocialConnections } from '@/components/social-connections';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -8,6 +9,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 import { Text } from '@/components/ui/text';
 import { signIn as supabaseSignIn } from '@/services/auth';
 import { router } from 'expo-router';
@@ -38,10 +40,10 @@ export function SignInForm() {
 
   return (
     <View className="gap-6">
-      <Card className="border-border/0 sm:border-border shadow-none sm:shadow-sm sm:shadow-black/5">
+      <Card className="border-white shadow-white">
         <CardHeader>
-          <CardTitle className="text-center text-xl sm:text-left">Sign In</CardTitle>
-          <CardDescription className="text-center sm:text-left">
+          <CardTitle className="text-left text-xl sm:text-left">Sign In</CardTitle>
+          <CardDescription className="text-left sm:text-left">
             Welcome back! Please sign in to continue
           </CardDescription>
         </CardHeader>
@@ -59,6 +61,7 @@ export function SignInForm() {
                 onSubmitEditing={onEmailSubmitEditing}
                 returnKeyType="next"
                 submitBehavior="submit"
+                className="focus:border-secondary"
               />
             </View>
             <View className="gap-1.5">
@@ -82,6 +85,7 @@ export function SignInForm() {
                 value={password}
                 onChangeText={setPassword}
                 onSubmitEditing={onSubmit}
+                className="focus:border-secondary"
               />
             </View>
             <Button className="w-full" onPress={onSubmit}>
@@ -90,14 +94,14 @@ export function SignInForm() {
           </View>
           <Text className="text-center text-sm">
             Don&apos;t have an account?{' '}
-            <Text onPress={() => router.replace('/signup')} className="text-sm underline underline-offset-4">Sign up</Text>
+            <Text onPress={() => router.replace('/signup')} className="text-sm color-primary underline-offset-4">Sign up</Text>
           </Text>
-          {/* <View className="flex-row items-center">
+          <View className="flex-row items-center">
             <Separator className="flex-1" />
             <Text className="text-muted-foreground px-4 text-sm">or</Text>
             <Separator className="flex-1" />
           </View>
-          <SocialConnections /> */}
+          <SocialConnections />
         </CardContent>
       </Card>
     </View>

@@ -1,5 +1,11 @@
 import { Button } from "@/components/ui/button";
 import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -119,7 +125,7 @@ export default function Home() {
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <Pressable
-            className="border border-border rounded-lg p-3 mb-3 bg-card"
+            className="mb-3"
             onPress={() =>
               router.push({
                 pathname: "/video",
@@ -133,12 +139,14 @@ export default function Home() {
               })
             }
           >
-            <Text className="text-base font-semibold mb-1">
-              {item.title ?? "Workout"}
-            </Text>
-            <Text className="text-sm text-muted-foreground">
-              Date: {formatDate(item.recorded_at ?? item.created_at)}
-            </Text>
+            <Card>
+              <CardHeader>
+                <CardTitle>{item.title ?? "Workout"}</CardTitle>
+                <CardDescription>
+                  Date: {formatDate(item.recorded_at ?? item.created_at)}
+                </CardDescription>
+              </CardHeader>
+            </Card>
           </Pressable>
         )}
       />
@@ -146,7 +154,7 @@ export default function Home() {
   };
 
   return (
-    <View className="flex-1 p-4">
+    <View className="flex-1 p-4 bg-background">
       <View className="flex-row justify-between">
         <Text className="text-xl font-semibold mb-3">Your Workout Feedback</Text>
         <DropdownMenu>
@@ -192,7 +200,7 @@ export default function Home() {
       </View>
       {renderContent()}
       <View className="py-3">
-        <Button onPress={() => setIsPickerOpen(true)}>
+        <Button className="bg-primary" onPress={() => setIsPickerOpen(true)}>
           <Text className="text-white">Analyze Workout</Text>
         </Button>
       </View>

@@ -46,10 +46,10 @@ export function SignUpForm() {
 
   return (
     <View className="gap-6">
-      <Card className="border-border/0 sm:border-border shadow-none sm:shadow-sm sm:shadow-black/5">
+      <Card className="border-white shadow-white">
         <CardHeader>
-          <CardTitle className="text-center text-xl sm:text-left">Create your account</CardTitle>
-          <CardDescription className="text-center sm:text-left">
+          <CardTitle className="text-left text-xl sm:text-left">Create your account</CardTitle>
+          <CardDescription className="text-left sm:text-left">
             Welcome! Please fill in the details to get started.
           </CardDescription>
         </CardHeader>
@@ -67,6 +67,7 @@ export function SignUpForm() {
                 onSubmitEditing={onEmailSubmitEditing}
                 returnKeyType="next"
                 submitBehavior="submit"
+                className="focus:border-secondary"
               />
             </View>
             <View className="gap-1.5">
@@ -81,6 +82,7 @@ export function SignUpForm() {
                 value={password}
                 onChangeText={setPassword}
                 onSubmitEditing={onSubmit}
+                className="focus:border-secondary"
               />
             </View>
             <View className="gap-1.5">
@@ -94,6 +96,7 @@ export function SignUpForm() {
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 onSubmitEditing={onSubmit}
+                className="focus:border-secondary"
               />
             </View>
             <Button className="w-full" onPress={onSubmit}>
@@ -102,7 +105,7 @@ export function SignUpForm() {
           </View>
           <Text className="text-center text-sm">
             Already have an account?{' '}
-            <Text onPress={() => router.replace('/signin')} className="text-sm underline underline-offset-4">Sign in</Text>
+            <Text onPress={() => router.replace('/signin')} className="text-sm color-primary underline-offset-4">Sign in</Text>
           </Text>
           <View className="flex-row items-center">
             <Separator className="flex-1" />

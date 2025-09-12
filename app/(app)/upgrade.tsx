@@ -1,15 +1,18 @@
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { getPlans, type Plan as ApiPlan } from "@/services/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useMemo, useState } from "react";
-import {
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View
-} from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 
 export default function Upgrade() {
   const [plans, setPlans] = useState<ApiPlan[] | null>(null);
@@ -55,152 +58,79 @@ export default function Upgrade() {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.container}
-      keyboardShouldPersistTaps="handled"
-    >
-      <Pressable className="mb-2" onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={24} color="black" />
-      </Pressable>
-      <Text style={styles.headerTitle}>Manage Your Plan</Text>
+    <ScrollView keyboardShouldPersistTaps="handled" className="bg-background">
+      <View className="p-4 gap-4">
+        <Pressable className="mb-2" onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={24} color="black" />
+        </Pressable>
+        <Text className="text-lg font-semibold mb-1">Manage Your Plan</Text>
 
-      <View style={styles.segmented}>
-        {(plans ?? []).map((p) => (
-          <Pressable
-            key={p.id}
-            accessibilityRole="button"
-            onPress={() => setSelectedPlanId(p.id)}
-            style={[styles.segment, selectedPlanId === p.id && styles.segmentSelected]}
-          >
-            <Text
-              style={[
-                styles.segmentText,
-                selectedPlanId === p.id && styles.segmentTextSelected,
-              ]}
+        <View className="flex-row items-center gap-2">
+          {(plans ?? []).map((p) => (
+            <Pressable
+              key={p.id}
+              accessibilityRole="button"
+              onPress={() => setSelectedPlanId(p.id)}
+              className={`flex-1 items-center py-2.5 border border-secondary rounded-full ${
+                selectedPlanId === p.id ? "bg-primary" : ""
+              }`}
             >
-              {p.name}
-              {p.interval === "year" && (
-                <Text style={{ fontSize: 12, color: "gray" }}> 35% off</Text>
-              )}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.priceLine}>
-          <Text style={styles.priceAmount}>{priceText.amount}</Text>
-          <Text> {priceText.suffix}</Text>
-        </Text>
-        <Text style={styles.subtitle}>{selectedPlan?.name ?? "Select a plan"}</Text>
-
-        <View style={styles.features}>
-          <Text style={styles.featuresTitle}>Features</Text>
-          <View style={styles.featureList}>
-            {[
-              "Timestamped form suggestions",
-              "Rep-by-rep technique notes",
-              "Clear corrective cues",
-              "Detect common form errors",
-              "On-video caption overlays",
-            ].map((f) => (
-              <Text key={f} style={styles.featureItem}>
-                • {f}
+              <Text className={`text-sm ${selectedPlanId === p.id ? "font-bold text-white" : ""}`}>
+                {p.name}
+                {p.interval === "year" && (
+                  <Text className={`text-xs ${selectedPlanId === p.id ? "text-white" : "text-primary"}`}> 35% off</Text>
+                )}
               </Text>
-            ))}
+            </Pressable>
+          ))}
+        </View>
+
+        <Card className="bg-primary">
+          <CardHeader>
+            <CardTitle className="text-2xl text-white">{priceText.amount}</CardTitle>
+            <CardDescription className="text-white/80">
+              {priceText.suffix} • {selectedPlan?.name ?? "Select a plan"}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <View className="flex-row items-center">
+              <Separator className="flex-1" />
+              <Text className="text-white px-4 text-sm">Features</Text>
+              <Separator className="flex-1" />
+            </View>
+            <View className="gap-1.5 mt-2">
+              {[
+                "Timestamped form suggestions",
+                "Rep-by-rep technique notes",
+                "Clear corrective cues",
+                "Detect common form errors",
+                "On-video caption overlays",
+              ].map((f) => (
+                <Text key={f} className="text-sm text-white">
+                  • {f}
+                </Text>
+              ))}
+            </View>
+          </CardContent>
+          <CardFooter>
+            <Text className="text-white/80">All prices in USD</Text>
+          </CardFooter>
+        </Card>
+
+        {/*
+        <View className="mt-2 border rounded-xl p-3 flex-row items-center gap-2">
+          <View className="flex-1">
+            <Text className="font-semibold">Not sure yet?</Text>
+            <Text className="text-xs">Enable 1 week trial</Text>
           </View>
+          <Switch value={trialEnabled} onValueChange={setTrialEnabled} />
         </View>
+        */}
+
+        <Button className="w-full mt-4" onPress={onContinue}>
+          <Text className="text-white">Upgrade</Text>
+        </Button>
       </View>
-
-      {/* <View style={styles.trialRow}>
-        <View style={{ flex: 1 }}>
-          <Text style={styles.trialTitle}>Not sure yet?</Text>
-          <Text style={styles.trialSubtitle}>Enable 1 week trial</Text>
-        </View>
-        <Switch value={trialEnabled} onValueChange={setTrialEnabled} />
-      </View> */}
-
-      <Button className="w-full mt-4" onPress={onContinue}>
-        <Text className="text-white">Upgrade</Text>
-      </Button>
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    gap: 16,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 4,
-  },
-  segmented: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  segment: {
-    flex: 1,
-    paddingVertical: 10,
-    borderWidth: 1,
-    borderRadius: 20,
-    alignItems: "center",
-  },
-  segmentSelected: {
-    borderWidth: 2,
-  },
-  segmentText: {
-    fontSize: 14,
-  },
-  segmentTextSelected: {
-    fontWeight: "700",
-  },
-  card: {
-    borderWidth: 1,
-    borderRadius: 12,
-    padding: 16,
-    gap: 8,
-  },
-  priceLine: {
-    fontSize: 16,
-    fontWeight: "500",
-  },
-  priceAmount: {
-    fontSize: 28,
-    fontWeight: "800",
-  },
-  subtitle: {
-    marginTop: 2,
-  },
-  features: {
-    marginTop: 8,
-    gap: 8,
-  },
-  featuresTitle: {
-    fontWeight: "600",
-  },
-  featureList: {
-    gap: 6,
-  },
-  featureItem: {
-    fontSize: 14,
-  },
-  trialRow: {
-    marginTop: 8,
-    borderWidth: 1,
-    borderRadius: 12,
-    padding: 12,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  trialTitle: {
-    fontWeight: "600",
-  },
-  trialSubtitle: {
-    fontSize: 12,
-  },
-});
