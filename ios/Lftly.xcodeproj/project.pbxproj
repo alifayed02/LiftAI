@@ -13,6 +13,8 @@
 		59A9BABC73F7F702EB85ADCB /* libPods-Lftly.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A53FE202464F96B8E083E2C /* libPods-Lftly.a */; };
 		7D07C955F03C936564272B4A /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8B53B62C9367103E64D67C /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		EA863AE42E7F60F700A8E299 /* OverlayAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA863AE22E7F60F700A8E299 /* OverlayAnalysis.swift */; };
+		EA863AE52E7F60F700A8E299 /* OverlayAnalysisBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = EA863AE32E7F60F700A8E299 /* OverlayAnalysisBridge.m */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +29,8 @@
 		AA8B53B62C9367103E64D67C /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Lftly/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		C58A481E4991A82783E768D2 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Lftly/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		EA863AE22E7F60F700A8E299 /* OverlayAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayAnalysis.swift; sourceTree = "<group>"; };
+		EA863AE32E7F60F700A8E299 /* OverlayAnalysisBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OverlayAnalysisBridge.m; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Lftly/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* Lftly-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Lftly-Bridging-Header.h"; path = "Lftly/Lftly-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -54,6 +58,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
 				C58A481E4991A82783E768D2 /* PrivacyInfo.xcprivacy */,
+				EA863AE22E7F60F700A8E299 /* OverlayAnalysis.swift */,
+				EA863AE32E7F60F700A8E299 /* OverlayAnalysisBridge.m */,
 			);
 			name = Lftly;
 			sourceTree = "<group>";
@@ -334,6 +340,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
+				EA863AE42E7F60F700A8E299 /* OverlayAnalysis.swift in Sources */,
+				EA863AE52E7F60F700A8E299 /* OverlayAnalysisBridge.m in Sources */,
 				7D07C955F03C936564272B4A /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
