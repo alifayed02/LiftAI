@@ -4,6 +4,7 @@
 
 RCT_EXTERN_METHOD(render:(NSString *)input
                   items:(NSArray *)items
+                  analysis:(NSDictionary *)analysis
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 

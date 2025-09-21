@@ -1,6 +1,6 @@
 import { isPro } from "@/lib/purchases";
 import { supabase } from "@/lib/supabase";
-import { getUserById } from "@/services/auth";
+import { analyzeWorkout, createWorkoutDirect, getUserById } from "@/services/auth";
 import { overlayAnalysisAVF } from "@/services/overlayAnalysis.native";
 import { Ionicons } from "@expo/vector-icons";
 import { ResizeMode, Video } from "expo-av";
@@ -29,6 +29,13 @@ export default function Analyze() {
     let cancelled = false;
     const [w, h] = [Number(params.width ?? 0), Number(params.height ?? 0)];
 
+    const b64ToArrayBuffer = (base64: string) => {
+      const binaryString = globalThis.atob ? globalThis.atob(base64) : Buffer.from(base64, 'base64').toString('binary');
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) bytes[i] = binaryString.charCodeAt(i);
+      return bytes.buffer;
+    };
 
     const upload = async () => {
       try {
@@ -52,14 +59,29 @@ export default function Analyze() {
         }
     
         // ⬇️ NO raw upload — pass local file straight to AVFoundation
-        const analysis = JSON.parse(`{
-          "exercise": "Incline Bench Press",
-          "analysis": [
-            { "timestamp": "00:01", "suggestion": "Before unracking..." },
-            { "timestamp": "00:03", "suggestion": "During the descent..." },
-            { "timestamp": "00:09", "suggestion": "For personal best attempts..." }
-          ]
-        }`);
+        // const analysis = JSON.parse(`{
+        //   "exercise": "Incline Bench Press",
+        //   "analysis": [
+        //     { "timestamp": "00:01", "suggestion": "Before unracking..." },
+        //     { "timestamp": "00:03", "suggestion": "During the descent..." },
+        //     { "timestamp": "00:09", "suggestion": "For personal best attempts..." }
+        //   ]
+        // }`);
+
+        const base64_raw = await FileSystem.readAsStringAsync(fileUri, { encoding: FileSystem.EncodingType.Base64 });
+        const buffer = b64ToArrayBuffer(base64_raw);
+
+        const ext = (typeof fileName === 'string' && fileName.includes('.') ? fileName.split('.').pop() : 'mp4')?.toLowerCase();
+        const path = `${userId}/${Date.now()}.${ext}`;
+        const contentType = (typeof mimeType === 'string' && mimeType) || (ext === 'mp4' ? 'video/mp4' : 'application/octet-stream');
+
+        const { error } = await supabase.storage.from('raw_workouts').upload(path, buffer, {
+          contentType,
+          upsert: false,
+        });
+        if (error) throw error;
+        
+        const analysis = await analyzeWorkout(path);
         const analyzedLocalPath = await overlayAnalysisAVF(fileUri, analysis);
     
         // Upload the processed file to Supabase using base64
@@ -85,6 +107,8 @@ export default function Analyze() {
         if (signErr) throw signErr;
     
         setSignedUrl(signed?.signedUrl ?? null);
+
+        const created = await createWorkoutDirect(userId, analysis.exercise, outKey);
       } catch (e: any) {
         if (e?.status === 403) {
           router.replace("/upgrade");

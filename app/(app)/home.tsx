@@ -34,6 +34,7 @@ export default function Home() {
   const [workouts, setWorkouts] = useState<Workout[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -79,7 +80,7 @@ export default function Home() {
     if (!result.canceled && result.assets && result.assets.length > 0) {
       const selected = result.assets[0];
       router.push({
-        pathname: "/analyze-new",
+        pathname: "/analyze-new" as any,
         params: {
           uri: selected.uri ?? "",
           assetId: (selected as any).assetId ?? "",
@@ -91,6 +92,27 @@ export default function Home() {
       });
     }
     setIsPickerOpen(false);
+  };
+
+  const handleRefresh = async () => {
+    try {
+      setRefreshing(true);
+      const { data, error } = await supabase.auth.getUser();
+      if (error) throw error;
+      const userId = data.user?.id;
+      if (!userId) {
+        setError("Not authenticated");
+        setWorkouts([]);
+        return;
+      }
+      const list = await getWorkouts(userId);
+      setWorkouts(list);
+      setError(null);
+    } catch (e: any) {
+      setError(e?.message ?? "Failed to refresh workouts");
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   const renderContent = () => {
@@ -122,6 +144,8 @@ export default function Home() {
         className="flex-1"
         data={workouts}
         keyExtractor={(item) => String(item.id)}
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
         renderItem={({ item }) => (
           <Pressable
             className="mb-3"

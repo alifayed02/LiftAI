@@ -15,9 +15,10 @@ class OverlayAnalysis: NSObject {
 
   @objc static func requiresMainQueueSetup() -> Bool { false }
 
-  @objc(render:items:resolver:rejecter:)
+  @objc(render:items:analysis:resolver:rejecter:)
   func render(_ input: String,
               items: NSArray,
+              analysis: NSDictionary,
               resolver resolve: @escaping RCTPromiseResolveBlock,
               rejecter reject: @escaping RCTPromiseRejectBlock) {
 
@@ -76,10 +77,12 @@ class OverlayAnalysis: NSObject {
     let overlayLayer = CALayer()
     overlayLayer.frame = CGRect(origin: .zero, size: videoSize)
     
-    add(
-      text: "Happy Birthday",
+    // Parse analysis JSON and add caption layers
+    addCaptions(
+      from: analysis,
       to: overlayLayer,
-      videoSize: videoSize)
+      videoSize: videoSize,
+      videoDuration: asset.duration)
     
     let outputLayer = CALayer()
     outputLayer.frame = CGRect(origin: .zero, size: videoSize)
@@ -178,27 +181,167 @@ class OverlayAnalysis: NSObject {
     return instruction
   }
   
-  private func add(text: String, to layer: CALayer, videoSize: CGSize) {
+  private func addCaptions(from analysis: NSDictionary, to layer: CALayer, videoSize: CGSize, videoDuration: CMTime) {
+    guard let analysisArray = analysis["analysis"] as? NSArray else {
+      print("No analysis array found in JSON")
+      return
+    }
+    
+    // Convert to array of tuples for easier processing
+    var captionItems: [(startTime: CMTime, endTime: CMTime?, text: String)] = []
+    
+    for item in analysisArray {
+      guard let analysisItem = item as? NSDictionary,
+            let timestampStr = analysisItem["timestamp"] as? String,
+            let suggestion = analysisItem["suggestion"] as? String else {
+        continue
+      }
+      
+      // Parse timestamp (format: "00:01" = MM:SS)
+      let startTime = parseTimestamp(timestampStr)
+      var endTime: CMTime? = nil
+      
+      // Check if there's an explicit endTimestamp
+      if let endTimestampStr = analysisItem["endTimestamp"] as? String {
+        endTime = parseTimestamp(endTimestampStr)
+      }
+      
+      captionItems.append((startTime: startTime, endTime: endTime, text: suggestion))
+    }
+    
+    // Sort by start time to ensure proper ordering
+    captionItems.sort { $0.startTime < $1.startTime }
+    
+    // Calculate end times: each caption ends when the next one starts, or at video end
+    for (index, item) in captionItems.enumerated() {
+      let startTime = item.startTime
+      let endTime: CMTime
+      
+      if let explicitEndTime = item.endTime {
+        // Use explicit end time if provided
+        endTime = explicitEndTime
+      } else if index < captionItems.count - 1 {
+        // End when next caption starts
+        endTime = captionItems[index + 1].startTime
+      } else {
+        // Last caption: end at video end
+        endTime = videoDuration
+      }
+      
+      addCaptionLayer(
+        text: item.text,
+        startTime: startTime,
+        endTime: endTime,
+        to: layer,
+        videoSize: videoSize
+      )
+    }
+  }
+  
+  private func parseTimestamp(_ timestamp: String) -> CMTime {
+    let components = timestamp.split(separator: ":")
+    guard components.count == 2,
+          let minutes = Int(components[0]),
+          let seconds = Int(components[1]) else {
+      return CMTime.zero
+    }
+    
+    let totalSeconds = minutes * 60 + seconds
+    return CMTime(seconds: Double(totalSeconds), preferredTimescale: 600)
+  }
+  
+  private func addCaptionLayer(text: String, startTime: CMTime, endTime: CMTime, to layer: CALayer, videoSize: CGSize) {
+    // Create caption background
+    let backgroundLayer = CALayer()
+    backgroundLayer.backgroundColor = UIColor.black.withAlphaComponent(0.8).cgColor
+    backgroundLayer.cornerRadius = 8
+    
+    // Create text layer with white text and multiline support
+    let paragraphStyle = NSMutableParagraphStyle()
+    paragraphStyle.alignment = .left
+    paragraphStyle.lineBreakMode = .byWordWrapping
+    
     let attributedText = NSAttributedString(
       string: text,
       attributes: [
-        .font: UIFont(name: "ArialRoundedMTBold", size: 60) as Any,
-        .foregroundColor: UIColor.systemGreen,
-        .strokeColor: UIColor.white,
-        .strokeWidth: -3])
+        .font: UIFont.systemFont(ofSize: 24, weight: .medium),
+        .foregroundColor: UIColor.white,
+        .paragraphStyle: paragraphStyle
+      ])
+    
     let textLayer = CATextLayer()
     textLayer.string = attributedText
     textLayer.shouldRasterize = true
     textLayer.rasterizationScale = UIScreen.main.scale
     textLayer.backgroundColor = UIColor.clear.cgColor
-    textLayer.alignmentMode = .center
+    textLayer.alignmentMode = .left
+    textLayer.contentsScale = UIScreen.main.scale
+    textLayer.isWrapped = true // Enable text wrapping
+    
+    // Calculate multiline text size with constrained width
+    let padding: CGFloat = 20
+    let maxWidth = videoSize.width - padding * 2
+    let constrainedSize = CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude)
+    
+    let textRect = text.boundingRect(
+      with: constrainedSize,
+      options: [.usesLineFragmentOrigin, .usesFontLeading],
+      attributes: [
+        .font: UIFont.systemFont(ofSize: 24, weight: .medium),
+        .paragraphStyle: paragraphStyle
+      ],
+      context: nil
+    )
+    
+    let textSize = textRect.size
+    
+    // Position at bottom of video with padding
+    let captionHeight = textSize.height + padding
+    let captionWidth = maxWidth
+    
+    let captionY = videoSize.height - captionHeight - 60 // 60pt from bottom
+    let captionX = (videoSize.width - captionWidth) / 2
+    
+    backgroundLayer.frame = CGRect(
+      x: captionX,
+      y: captionY,
+      width: captionWidth,
+      height: captionHeight
+    )
+    
     textLayer.frame = CGRect(
-      x: 0,
-      y: videoSize.height * 0.66,
-      width: videoSize.width,
-      height: 150)
-    textLayer.displayIfNeeded()
-    layer.addSublayer(textLayer)
-
+      x: padding / 2,
+      y: padding / 2,
+      width: captionWidth - padding,
+      height: textSize.height
+    )
+    
+    // Add text layer to background layer
+    backgroundLayer.addSublayer(textLayer)
+    
+    // Add timing animations
+    let showAnimation = CABasicAnimation(keyPath: "opacity")
+    showAnimation.fromValue = 0.0
+    showAnimation.toValue = 1.0
+    showAnimation.duration = 0.3
+    showAnimation.beginTime = AVCoreAnimationBeginTimeAtZero + CMTimeGetSeconds(startTime)
+    showAnimation.fillMode = .forwards
+    showAnimation.isRemovedOnCompletion = false
+    
+    let hideAnimation = CABasicAnimation(keyPath: "opacity")
+    hideAnimation.fromValue = 1.0
+    hideAnimation.toValue = 0.0
+    hideAnimation.duration = 0.3
+    hideAnimation.beginTime = AVCoreAnimationBeginTimeAtZero + CMTimeGetSeconds(endTime)
+    hideAnimation.fillMode = .forwards
+    hideAnimation.isRemovedOnCompletion = false
+    
+    // Initially hide the caption
+    backgroundLayer.opacity = 0.0
+    
+    backgroundLayer.add(showAnimation, forKey: "show")
+    backgroundLayer.add(hideAnimation, forKey: "hide")
+    
+    layer.addSublayer(backgroundLayer)
   }
 }
