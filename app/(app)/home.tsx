@@ -25,6 +25,8 @@ import {
   FlatList,
   Modal,
   Pressable,
+  RefreshControl,
+  ScrollView,
   Text,
   View,
 } from "react-native";
@@ -130,13 +132,21 @@ export default function Home() {
         </View>
       );
     }
+
     if (!workouts || workouts.length === 0) {
       return (
-        <View className="flex-1 items-center justify-center">
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, alignItems: "center", justifyContent: "center", paddingVertical: 24 }}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
+          alwaysBounceVertical   // iOS: enables pull even if content is short
+          overScrollMode="always" // Android: allow overscroll/pull on short content
+        >
           <Text className="text-muted-foreground text-base">
             Analyze a workout to get started
           </Text>
-        </View>
+        </ScrollView>
       );
     }
     return (

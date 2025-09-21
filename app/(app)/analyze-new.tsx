@@ -8,7 +8,7 @@ import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Pressable, Text, View } from "react-native";
 
 export default function Analyze() {
   const params = useLocalSearchParams<{
@@ -127,46 +127,25 @@ export default function Analyze() {
   const [signedUrl, setSignedUrl] = useState<string | null>(null);
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 p-4 bg-background">
       <Pressable className="mb-2" onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color="black" />
       </Pressable>
-      <Text style={styles.title}>Workout Analysis</Text>
+      <Text className="text-[22px] font-bold mb-3">Workout Analysis</Text>
       {signedUrl ? (
         <Video
           source={{ uri: signedUrl }}
           useNativeControls
-          style={{ width: '100%', aspectRatio: (Number(width) && Number(height)) ? Number(width) / Number(height) : 16 / 9 }}
+          className="w-full"
+          style={{ aspectRatio: (Number(width) && Number(height)) ? Number(width) / Number(height) : 16 / 9 }}
           resizeMode={ResizeMode.CONTAIN}
         />
       ) : (
-        <View style={styles.loaderSection}>
+        <View className="flex-1 justify-center items-center">
           <ActivityIndicator size="large" color="#007AFF" />
-          <Text style={styles.loaderText}>Analyzing Exercise...</Text>
+          <Text className="mt-3 text-base text-[#333]">Analyzing Exercise...</Text>
         </View>
       )}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: "700",
-    marginBottom: 12,
-  },
-  loaderSection: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loaderText: {
-    marginTop: 12,
-    fontSize: 16,
-    color: "#333",
-  },
-});
