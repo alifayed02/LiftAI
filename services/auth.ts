@@ -1,4 +1,4 @@
-import { initPurchases, logIn, logOut } from "@/lib/purchases";
+import { logIn, logOut } from "@/lib/purchases";
 import { supabase } from "@/lib/supabase";
 import * as Linking from "expo-linking";
 
@@ -7,6 +7,22 @@ const API_BASE =
   ENV === "production"
     ? process.env.EXPO_PUBLIC_PROD_URL
     : process.env.EXPO_PUBLIC_DEV_URL;
+
+
+export async function createUser(userId: string, email: string) {
+  try {
+    const response = await fetch(`${API_BASE}/api/v1/users/create`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: userId, email }),
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to create user: ${response.status} ${response.statusText}`);
+    }
+  } catch (e) {
+    console.warn("Error calling backend user create endpoint:", e);
+  }
+}
 
 export async function signUp(email: string, password: string) {
   const { data, error } = await supabase.auth.signUp({ email, password });
@@ -22,14 +38,10 @@ export async function signUp(email: string, password: string) {
       body: JSON.stringify({ id: userId, email }),
     });
     if (!response.ok) {
-      console.warn(
-        "Failed to create user in backend:",
-        response.status,
-        await response.text()
-      );
+      throw new Error(`Failed to create user: ${response.status} ${response.statusText}`);
     }
   } catch (e) {
-    console.warn("Error calling backend user create endpoint:", e);
+    throw new Error(`Failed to create user: ${e}`);
   }
 
   return data;
@@ -42,7 +54,6 @@ export async function signIn(email: string, password: string) {
   });
   if (error) throw error;
 
-  await initPurchases(); // await
   if (data.user?.id) await logIn(data.user.id); // await
 
   return data;

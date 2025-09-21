@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { signInWithApple } from '@/lib/apple';
 import { cn } from '@/lib/utils';
+import { router } from 'expo-router';
 import { useColorScheme } from 'nativewind';
 import { Image, Platform, View } from 'react-native';
 
@@ -29,10 +30,11 @@ export function SocialConnections() {
             variant="outline"
             size="sm"
             className="sm:flex-1"
-            onPress={() => {
+            onPress={async () => {
               // TODO: Authenticate with social provider and navigate to protected screen if successful
               if (strategy.type === 'oauth_apple') {
-                signInWithApple();
+                await signInWithApple();
+                router.replace("/home");
               }
             }}>
             <Image

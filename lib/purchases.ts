@@ -42,14 +42,10 @@ export async function initPurchases() {
 }
 
 export async function logIn(userId: string) {
-  // Ensure configured before logging in
-  await initPurchases();
   await Purchases.logIn(userId);
 }
 
 export async function logOut() {
-  // Ensure configured before logging out (safe if already configured)
-  await initPurchases();
   await Purchases.logOut();
 }
 
