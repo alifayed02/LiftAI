@@ -128,10 +128,12 @@ export default function Analyze() {
 
   return (
     <View className="flex-1 p-4 bg-background">
-      <Pressable className="mb-2" onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={24} color="black" />
-      </Pressable>
-      <Text className="text-[22px] font-bold mb-3">Workout Analysis</Text>
+      <View className="flex-row justify-between">
+        <Pressable className="mb-2" onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={24} color="black" />
+        </Pressable>
+        <Text className="text-[22px] font-bold mb-3">Workout Analysis</Text>
+      </View>
       {signedUrl ? (
         <Video
           source={{ uri: signedUrl }}

@@ -144,6 +144,16 @@ export async function createWorkout(
   return await response.json();
 }
 
+export async function deleteWorkout(workoutId: string) {
+  const response = await fetch(`${API_BASE}/api/v1/workouts/${encodeURIComponent(workoutId)}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to delete workout: ${response.status} ${response.statusText}`);
+  }
+  return await response.json();
+}
+
 export async function analyzeWorkout(videoPath: string) {
   const response = await fetch(`${API_BASE}/api/v1/workouts/analyze`, {
     method: "POST",

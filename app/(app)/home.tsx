@@ -17,8 +17,8 @@ import { formatDate } from "@/lib/utils";
 import { getWorkouts, signOut, type Workout } from "@/services/auth";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { router } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { router, useFocusEffect } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -37,6 +37,31 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+
+  const refetch = async () => {
+    try {
+      const { data, error } = await supabase.auth.getUser();
+      if (error) throw error;
+      const userId = data.user?.id;
+      if (!userId) {
+        setError("Not authenticated");
+        setWorkouts([]);
+        return;
+      }
+      const list = await getWorkouts(userId);
+      setWorkouts(list);
+      setError(null);
+    } catch (e: any) {
+      setError(e?.message ?? "Failed to refresh workouts");
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();            // runs every time this screen comes into focus
+      return () => {};      // optional cleanup
+    }, [])
+  );
 
   useEffect(() => {
     let mounted = true;
