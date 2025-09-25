@@ -1,6 +1,7 @@
 import { logIn, logOut } from "@/lib/purchases";
 import { supabase } from "@/lib/supabase";
 import * as Linking from "expo-linking";
+import Purchases from "react-native-purchases";
 
 const ENV = process.env.EXPO_PUBLIC_ENV;
 const API_BASE =
@@ -247,6 +248,8 @@ export async function syncWithRC() {
   if (error) throw error;
   const userId = data.user?.id;
   if (!userId) throw new Error("Not authenticated");
+
+  await Purchases.syncPurchases();
 
   const response = await fetch(`${API_BASE}/api/v1/subscriptions/create`, {
     method: "POST",
